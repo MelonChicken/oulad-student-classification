@@ -7,7 +7,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "kaggle_oulad"
 REPORT_DIR = ROOT / "reports"
-TABLE_DIR = REPORT_DIR / "tables"
+TABLE_DIR = REPORT_DIR / "tables" / "data_preprocessing"
 REPORT_PATH = REPORT_DIR / "data_integrity_report.md"
 
 TABLE_FILES = {
@@ -439,7 +439,7 @@ def build_report(
         "- No final feature construction or modeling has been performed.",
         "",
         "## Generated CSV Evidence",
-        *[f"- reports/tables/{path.name}" for path in sorted(TABLE_DIR.glob('*.csv'))],
+        *[f"- {path.relative_to(ROOT).as_posix()}" for path in sorted(TABLE_DIR.glob('*.csv'))],
         "",
     ]
     REPORT_PATH.write_text("\n".join(lines), encoding="utf-8")

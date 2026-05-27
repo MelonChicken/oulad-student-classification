@@ -52,3 +52,14 @@ python src\build_features.py
 ```
 
 After the required human decisions are made, add a separate validation or modeling-prep script that creates an explicit predictor-column manifest. Do not train final models until that manifest is reviewed.
+
+## Baseline Feature Agent
+
+- Decision: Created `data/processed/features_week{5,7,10}_baseline.csv` from cohort feature files without modifying raw data.
+- Decision: `target_at_risk = 1` when `final_result` is `Withdrawn` or `Fail`; otherwise `0`.
+- Decision: `final_result`, `target_withdrawn`, `target_at_risk`, and base key columns are retained for audit/joins but must be excluded from predictor matrices.
+- Decision: VLE duplicate handling uses key-level mean `sum_click` from original `studentVle.csv`; existing `_sum_strategy` and `_max_strategy` click columns are replaced by `_mean_strategy` columns.
+- Decision: Assessment rows for the 11 missing-due-date `assessment_id` values are excluded before computing cutoff assessment summaries.
+- Decision: Selected missing-prone fields get `{column}_missing` indicators before numeric zero fill or categorical `Unknown` fill.
+- Decision: `date_unregistration` remains excluded from baseline outputs.
+- Unresolved: Whether to use banked assessment metadata, VLE release-week metadata, module-presentation length, grouped activity dimensions, or alternate score imputations remains deferred until after first baseline review.

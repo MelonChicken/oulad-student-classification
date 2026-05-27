@@ -265,15 +265,15 @@ _No rows._
 - No final feature construction or modeling has been performed.
 
 ## Generated CSV Evidence
-- reports/tables/date_numeric_range_flags.csv
-- reports/tables/date_numeric_range_stats.csv
-- reports/tables/key_duplicates.csv
-- reports/tables/missing_values_nonzero.csv
-- reports/tables/referential_integrity.csv
-- reports/tables/student_vle_duplicate_group_size_distribution.csv
-- reports/tables/student_vle_duplicate_summary.csv
-- reports/tables/table_shapes.csv
-- reports/tables/target_distribution_by_module.csv
-- reports/tables/target_distribution_by_module_presentation.csv
-- reports/tables/target_distribution_by_presentation.csv
-- reports/tables/target_distribution_overall.csv
+- reports/tables/data_preprocessing/date_numeric_range_flags.csv
+- reports/tables/data_preprocessing/date_numeric_range_stats.csv
+- reports/tables/data_preprocessing/key_duplicates.csv
+- reports/tables/data_preprocessing/missing_values_nonzero.csv
+- reports/tables/data_preprocessing/referential_integrity.csv
+- reports/tables/data_preprocessing/student_vle_duplicate_group_size_distribution.csv
+- reports/tables/data_preprocessing/student_vle_duplicate_summary.csv
+- reports/tables/data_preprocessing/table_shapes.csv
+- reports/tables/data_preprocessing/target_distribution_by_module.csv
+- reports/tables/data_preprocessing/target_distribution_by_module_presentation.csv
+- reports/tables/data_preprocessing/target_distribution_by_presentation.csv
+- reports/tables/data_preprocessing/target_distribution_overall.csv
