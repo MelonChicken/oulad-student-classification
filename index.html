@@ -9,11 +9,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0e12; --panel:#12161c; --panel2:#171c24; --raised:#1d242d;
-  --line:#283039; --line-soft:#1f262e; --ink:#eaeff4; --muted:#97a3b0;
-  --faint:#5d6873; --mint:#5fe3c8; --mint-dim:rgba(95,227,200,.13);
-  --amber:#f3c44e; --risk:#f47b6b; --safe:#74c89a; --violet:#9d8cff;
-  --blue:#6fb3f2;
+
+  --bg: #f6f8fb;
+  --panel: #ffffff;
+  --panel2: #f1f5f9;
+  --raised: #ffffff;
+
+  --line: #cbd5e1;
+  --line-soft: #e2e8f0;
+
+  --ink: #111827;
+  --muted: #334155;
+  --faint: #64748b;
+
+  --mint: #087f74;
+  --mint-dim: rgba(8, 127, 116, 0.12);
+
+  --amber: #a96600;
+  --risk: #c9362b;
+  --safe: #18794e;
+  --violet: #5b4ce6;
+  --blue: #1d4ed8;
   --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans KR',sans-serif;
   --serif:'Fraunces',serif;
 }
@@ -83,7 +99,7 @@ h2{font-family:var(--serif);font-size:clamp(26px,3.4vw,38px);font-weight:600;
 h3{font-family:var(--serif);font-size:21px;font-weight:600;margin:34px 0 14px;letter-spacing:-.01em}
 h4{font-size:13px;font-family:var(--mono);letter-spacing:.04em;color:var(--mint);
   text-transform:uppercase;margin:24px 0 12px}
-p{margin:10px 0;color:#cbd4dd}
+p{margin:10px 0;color:var(--muted)}
 p.note{color:var(--muted);font-size:14px}
 strong,b{color:var(--ink);font-weight:600}
 code{font-family:var(--mono);font-size:.88em;background:var(--raised);
@@ -115,7 +131,7 @@ th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:up
   color:var(--muted);background:var(--panel2);font-weight:500;position:sticky;top:0}
 tr:last-child td{border-bottom:none}
 td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
-tbody tr:hover{background:rgba(255,255,255,.018)}
+tbody tr:hover{background:#f8fafc}
 td .en,td code{white-space:nowrap}
 .tag{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:5px;
   border:1px solid var(--line);color:var(--muted)}
@@ -176,7 +192,7 @@ pre{background:#0a0d11;border:1px solid var(--line);border-radius:11px;padding:1
   overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#c6d0d9;margin:14px 0}
 pre .c{color:var(--faint)} pre .k{color:var(--violet)} pre .s{color:var(--mint)} pre .n{color:var(--amber)}
 ul.clean{list-style:none;margin:12px 0}
-ul.clean li{padding:8px 0 8px 28px;position:relative;border-top:1px solid var(--line-soft);color:#cbd4dd}
+ul.clean li{padding:8px 0 8px 28px;position:relative;border-top:1px solid var(--line-soft);color:var(--muted)}
 ul.clean li:first-child{border-top:none}
 ul.clean li::before{content:"";position:absolute;left:6px;top:16px;width:7px;height:7px;
   border-radius:2px;background:var(--mint);transform:rotate(45deg)}
@@ -192,6 +208,8 @@ ol.num li::before{content:counter(r);position:absolute;left:0;top:9px;font-famil
 .dot{width:10px;height:10px;border-radius:3px}
 
 .foot{padding:40px 0 0;color:var(--faint);font-size:12.5px;font-family:var(--mono)}
+
+[style*="color:#cbd4dd"]{color:var(--muted)!important}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(14px);transition:.6s cubic-bezier(.2,.7,.2,1)}
