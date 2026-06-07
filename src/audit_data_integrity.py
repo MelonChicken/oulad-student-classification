@@ -7,7 +7,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "kaggle_oulad"
 REPORT_DIR = ROOT / "reports"
-TABLE_DIR = REPORT_DIR / "tables" / "data_preprocessing"
+TABLE_DIR = ROOT / "data" / "report_tables" / "data_preprocessing"
 REPORT_PATH = REPORT_DIR / "data_integrity_report.md"
 
 TABLE_FILES = {

@@ -8,7 +8,6 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "kaggle_oulad"
 PROCESSED_DIR = ROOT / "data" / "processed"
 REPORT_DIR = ROOT / "reports"
-TABLE_DIR = REPORT_DIR / "tables"
 REPORT_PATH = REPORT_DIR / "baseline_feature_report.md"
 DECISION_LOG_PATH = REPORT_DIR / "decision_log.md"
 
@@ -44,7 +43,7 @@ MISSING_FLAG_COLUMNS = [
 
 def ensure_dirs() -> None:
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-    TABLE_DIR.mkdir(parents=True, exist_ok=True)
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def clean_name(value: object) -> str:
@@ -332,9 +331,13 @@ def write_report(validation_rows: list[dict[str, object]]) -> None:
         "- VLE key duplicates are aggregated with mean `sum_click` at `code_module`, `code_presentation`, `id_student`, `id_site`, `date` before student-level summaries.",
         "- Existing `_sum_strategy` and `_max_strategy` click columns are replaced by `_mean_strategy` columns.",
         "- Assessment summaries exclude all `studentAssessment` rows whose `id_assessment` has missing `assessments.date`.",
+        "- For week5/week7/week10, missing due-date assessment rows do not appear within the cutoff windows, so this exclusion does not change current baseline score/count summaries.",
+        "- If later cutoffs are used, missing due-date rows should be excluded only from due-date-dependent features, not from all score/count summaries.",
         "- `on_time_submission_count_until_cutoff` and `avg_days_before_due_until_cutoff` are derived from clean due-date assessment rows.",
         "- `is_retake` is derived as `num_of_prev_attempts > 0`.",
         "- Missing flags are added before filling selected numeric values with 0 and categorical values with `Unknown`.",
+        "- Predictor policy: always exclude `id_student`, `final_result`, `target_withdrawn`, `target_at_risk`, and `date_unregistration`; `code_module` and `code_presentation` may be used as categorical predictors depending on the modeling goal.",
+        "- The current baseline notebook uses stratified splitting; group-based validation by `id_student` is recommended when evaluating generalization to unseen students.",
         "",
         "## Validation Summary",
         "",
