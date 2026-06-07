@@ -91,7 +91,7 @@ OULAD (Open University Learning Analytics Dataset), Kaggle 버전 7개 테이블
 
 ### 산출물
 - `data_integrity_report.md`
-- `reports/tables/data_preprocessing/` 하위 12개 CSV 증거 파일
+- `data/report_tables/data_preprocessing/` 하위 12개 CSV 증거 파일
 
 ---
 
@@ -462,6 +462,10 @@ unified CSV의 모든 컬럼 중 1차 모델에 사용할 셋 (약 28개):
 - `data/processed/features_week7_baseline.csv`
 - `data/processed/features_week10_baseline.csv`
 
+최종 feature dictionary:
+
+- `data/processed/FEATURES.name`
+
 검증 결과:
 
 | cutoff | rows | columns | target positive | base key duplicates | missing flags | missing cells | final Stage 5 feature 누락 |
@@ -485,4 +489,4 @@ unified CSV의 모든 컬럼 중 1차 모델에 사용할 셋 (약 28개):
 CSV 정리:
 - Final preprocessing CSVs are only `features_week{5,7,10}_baseline.csv`.
 - Report evidence is kept in markdown reports rather than creating an additional baseline validation CSV.
-- The paper-replication notebook saves the full model evaluation record to `reports/tables/model_results/paper_replication_baseline_results.csv`. A best-only summary CSV is not kept.
+- The paper-replication notebook saves the full model evaluation record to `data/report_tables/model_results/paper_replication_baseline_results.csv`. A best-only summary CSV is not kept.

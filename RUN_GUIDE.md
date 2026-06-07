@@ -81,6 +81,37 @@ data/processed/
 
 ## Stage 4 — Reviewer
 
+## Stage 4b Active-at-cutoff cohort and baseline
+
+Run this after the cutoff feature files are created:
+
+```powershell
+python src\build_cohort.py
+```
+
+Expected outputs:
+
+```text
+src/build_cohort.py
+reports/cohort_report.md
+data/processed/features_week{5,7,10}_cohort.csv
+```
+
+Then create the baseline/model-ready files:
+
+```powershell
+python src\build_baseline_features.py
+```
+
+Expected outputs:
+
+```text
+reports/baseline_feature_report.md
+data/processed/features_week{5,7,10}_baseline.csv
+```
+
+---
+
 ```powershell
 codex --ask-for-approval on-request "Read AGENTS.md, reports/data_integrity_report.md, reports/leakage_review.md, reports/feature_pipeline_report.md, and prompts/04_reviewer_agent.md. Review the work and write final recommendations. Do not train models."
 ```

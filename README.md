@@ -60,3 +60,32 @@ pip install -r requirements.txt
 ```bash
 jupyter notebook notebooks/exploring_dataset.ipynb
 ```
+
+### 2. 데이터 준비
+```bash
+  python src\build_features.py
+  python src\build_cohort.py
+  python src\build_baseline_features.py
+```
+#### 각 파일별 실행 산출물
+  1. build_features.py
+     → data/processed/features_week5.csv
+     → data/processed/features_week7.csv
+     → data/processed/features_week10.csv
+
+  2. build_cohort.py
+     → data/processed/features_week5_cohort.csv
+     → data/processed/features_week7_cohort.csv
+     → data/processed/features_week10_cohort.csv
+     → reports/cohort_report.md
+
+  3. build_baseline_features.py
+     → data/processed/features_week5_baseline.csv
+     → data/processed/features_week7_baseline.csv
+     → data/processed/features_week10_baseline.csv
+     → reports/baseline_feature_report.md
+
+- 최종 모델링용 파일은 항상 이 3개입니다.
+  - `data/processed/features_week5_baseline.csv`
+  - `data/processed/features_week7_baseline.csv`
+  - `data/processed/features_week10_baseline.csv`
