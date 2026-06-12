@@ -70,3 +70,14 @@ After the required human decisions are made, add a separate validation or modeli
 - Decision: Active-at-cutoff cohort retains rows only when `date_registration <= cutoff_day` or missing, and `date_unregistration > cutoff_day` or missing.
 - Decision: `date_unregistration` is used only for cohort construction and is not written to cohort or baseline outputs.
 - Decision: Rows with missing `date_registration` are retained in the baseline cohort with missing flags because the count is small and registration status cannot be confirmed.
+
+## Model Experiment Logging Agent
+
+- Decision: Grid-search experiment outputs are appended to `data/report_tables/model_results/feature_engineering_grid_results.csv`.
+- Decision: F1-selected best rows are appended to `data/report_tables/model_results/feature_engineering_best_results.csv`.
+- Decision: Tuning runs use stratified 5-fold cross-validation with `RANDOM_STATE = 724` and save precision, recall, F1, ROC-AUC, PR-AUC, and accuracy.
+- Decision: `id_student`, `final_result`, `target_withdrawn`, `target_at_risk`, and `date_unregistration` are excluded from automatic predictor feature sets.
+- Decision: Reviewed categorical predictors can be included through pipeline-only one-hot encoding; raw feature CSV files are not modified.
+- Decision: Categorical missing values are encoded as `Unknown` inside the experiment pipeline.
+- Decision: Experiment result CSVs keep raw feature names and add shorter alias columns for reporting readability.
+- Unresolved: Final categorical feature approval and final model selection remain open; these tuning outputs are not final model artifacts.
