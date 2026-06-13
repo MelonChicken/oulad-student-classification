@@ -80,4 +80,5 @@ After the required human decisions are made, add a separate validation or modeli
 - Decision: Reviewed categorical predictors can be included through pipeline-only one-hot encoding; raw feature CSV files are not modified.
 - Decision: Categorical missing values are encoded as `Unknown` inside the experiment pipeline.
 - Decision: Experiment result CSVs keep raw feature names and add shorter alias columns for reporting readability.
+- Decision: Removed model-result rows for feature sets not defined in `notebooks/model_experiment_feature_summary.ipynb`; `smoke_vle` and `static_categorical` were removed from `feature_engineering_best_results.csv` (2 rows), `feature_engineering_grid_results.csv` (8 rows), and `feature_engineering_behaviour.csv` (2 rows).
 - Unresolved: Final categorical feature approval and final model selection remain open; these tuning outputs are not final model artifacts.
