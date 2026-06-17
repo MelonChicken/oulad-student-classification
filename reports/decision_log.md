@@ -82,3 +82,18 @@ After the required human decisions are made, add a separate validation or modeli
 - Decision: Experiment result CSVs keep raw feature names and add shorter alias columns for reporting readability.
 - Decision: Removed model-result rows for feature sets not defined in `notebooks/model_experiment_feature_summary.ipynb`; `smoke_vle` and `static_categorical` were removed from `feature_engineering_best_results.csv` (2 rows), `feature_engineering_grid_results.csv` (8 rows), and `feature_engineering_behaviour.csv` (2 rows).
 - Unresolved: Final categorical feature approval and final model selection remain open; these tuning outputs are not final model artifacts.
+
+## Raw CSV Path Handling Agent
+
+- Decision: Raw OULAD files may be read from either `data/kaggle_oulad/` or `open+university+learning+analytics+dataset/`; raw files are not copied or overwritten.
+- Decision: Raw CSV value `?` is parsed as missing during script reads so registration dates, unregistration dates, due dates, scores, and related fields are typed and audited correctly.
+
+## Gunwoo Demographic Feature Agent
+
+- Decision: Added a focused demographic experiment for `gender`, `region`, and `age_band`.
+- Decision: Compare two feature sets only: `demographic_only` and `base_demographic`.
+- Decision: `base_demographic` uses `active_days_until_cutoff` and `total_click_until_cutoff_mean_strategy` as the reviewed base features.
+- Decision: Demographic categorical features are one-hot encoded inside the modeling pipeline, leaving baseline CSV files unchanged.
+- Decision: `date_unregistration`, `final_result`, `target_withdrawn`, and `target_at_risk` are excluded from predictors.
+- Decision: The script saves cross-validation summaries and an input feature audit, but does not save a final model artifact.
+- Decision: Actual model results were generated for week 5, week 7, and week 10 after creating the reviewed baseline feature files locally.

@@ -4,7 +4,11 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RAW_DIR = ROOT / "data" / "kaggle_oulad"
+RAW_DIR_CANDIDATES = [
+    ROOT / "data" / "kaggle_oulad",
+    ROOT / "open+university+learning+analytics+dataset",
+]
+RAW_DIR = next((path for path in RAW_DIR_CANDIDATES if path.exists()), RAW_DIR_CANDIDATES[0])
 PROCESSED_DIR = ROOT / "data" / "processed"
 REPORT_DIR = ROOT / "reports"
 REPORT_PATH = REPORT_DIR / "cohort_report.md"
@@ -23,6 +27,7 @@ def load_registration() -> pd.DataFrame:
     registration = pd.read_csv(
         RAW_DIR / "studentRegistration.csv",
         usecols=BASE_KEY + ["date_registration", "date_unregistration"],
+        na_values="?",
     )
     duplicated_keys = int(registration.duplicated(subset=BASE_KEY, keep=False).sum())
     if duplicated_keys:
