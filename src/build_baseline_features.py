@@ -5,7 +5,11 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RAW_DIR = ROOT / "data" / "kaggle_oulad"
+RAW_DIR_CANDIDATES = [
+    ROOT / "data" / "kaggle_oulad",
+    ROOT / "open+university+learning+analytics+dataset",
+]
+RAW_DIR = next((path for path in RAW_DIR_CANDIDATES if path.exists()), RAW_DIR_CANDIDATES[0])
 PROCESSED_DIR = ROOT / "data" / "processed"
 REPORT_DIR = ROOT / "reports"
 REPORT_PATH = REPORT_DIR / "baseline_feature_report.md"
@@ -58,13 +62,13 @@ def clean_name(value: object) -> str:
 
 
 def load_activity_types() -> list[str]:
-    vle = pd.read_csv(RAW_DIR / "vle.csv", usecols=["activity_type"])
+    vle = pd.read_csv(RAW_DIR / "vle.csv", usecols=["activity_type"], na_values="?")
     return sorted(clean_name(value) for value in vle["activity_type"].dropna().unique())
 
 
 def build_vle_mean_features(cutoff_day: int, activity_types: list[str]) -> pd.DataFrame:
     print(f"Building VLE mean features with studentVle.date <= {cutoff_day}")
-    student_vle = pd.read_csv(RAW_DIR / "studentVle.csv")
+    student_vle = pd.read_csv(RAW_DIR / "studentVle.csv", na_values="?")
     rows_before = len(student_vle)
     cutoff_rows = student_vle[student_vle["date"] <= cutoff_day].copy()
     rows_after = len(cutoff_rows)
@@ -82,7 +86,11 @@ def build_vle_mean_features(cutoff_day: int, activity_types: list[str]) -> pd.Da
         f"duplicate_key_rows_before_mean={duplicate_key_rows}, grouped_rows={len(grouped)}"
     )
 
-    vle_meta = pd.read_csv(RAW_DIR / "vle.csv", usecols=["id_site", "activity_type"])
+    vle_meta = pd.read_csv(
+        RAW_DIR / "vle.csv",
+        usecols=["id_site", "activity_type"],
+        na_values="?",
+    )
     vle_meta = vle_meta.drop_duplicates(subset=["id_site"])
     grouped = grouped.merge(vle_meta, on="id_site", how="left", validate="many_to_one")
     missing_activity_type = int(grouped["activity_type"].isna().sum())
@@ -133,10 +141,11 @@ def build_vle_mean_features(cutoff_day: int, activity_types: list[str]) -> pd.Da
 
 def build_assessment_features(cutoff_day: int) -> pd.DataFrame:
     print(f"Building assessment features with date_submitted <= {cutoff_day}")
-    student_assessment = pd.read_csv(RAW_DIR / "studentAssessment.csv")
+    student_assessment = pd.read_csv(RAW_DIR / "studentAssessment.csv", na_values="?")
     assessments = pd.read_csv(
         RAW_DIR / "assessments.csv",
         usecols=["code_module", "code_presentation", "id_assessment", "date", "weight"],
+        na_values="?",
     )
     missing_due_assessment_ids = assessments.loc[
         assessments["date"].isna(), "id_assessment"

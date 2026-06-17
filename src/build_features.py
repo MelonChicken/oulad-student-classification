@@ -5,7 +5,11 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data" / "kaggle_oulad"
+RAW_DIR_CANDIDATES = [
+    ROOT / "data" / "kaggle_oulad",
+    ROOT / "open+university+learning+analytics+dataset",
+]
+DATA_DIR = next((path for path in RAW_DIR_CANDIDATES if path.exists()), RAW_DIR_CANDIDATES[0])
 PROCESSED_DIR = ROOT / "data" / "processed"
 REPORT_DIR = ROOT / "reports"
 REPORT_PATH = REPORT_DIR / "feature_pipeline_report.md"
@@ -40,12 +44,12 @@ def ensure_dirs() -> None:
 
 def read_raw_tables() -> dict[str, pd.DataFrame]:
     tables = {
-        "student_info": pd.read_csv(DATA_DIR / "studentInfo.csv"),
-        "student_registration": pd.read_csv(DATA_DIR / "studentRegistration.csv"),
-        "student_vle": pd.read_csv(DATA_DIR / "studentVle.csv"),
-        "vle": pd.read_csv(DATA_DIR / "vle.csv"),
-        "student_assessment": pd.read_csv(DATA_DIR / "studentAssessment.csv"),
-        "assessments": pd.read_csv(DATA_DIR / "assessments.csv"),
+        "student_info": pd.read_csv(DATA_DIR / "studentInfo.csv", na_values="?"),
+        "student_registration": pd.read_csv(DATA_DIR / "studentRegistration.csv", na_values="?"),
+        "student_vle": pd.read_csv(DATA_DIR / "studentVle.csv", na_values="?"),
+        "vle": pd.read_csv(DATA_DIR / "vle.csv", na_values="?"),
+        "student_assessment": pd.read_csv(DATA_DIR / "studentAssessment.csv", na_values="?"),
+        "assessments": pd.read_csv(DATA_DIR / "assessments.csv", na_values="?"),
     }
     for name, df in tables.items():
         print(f"Loaded {name}: shape={df.shape}")

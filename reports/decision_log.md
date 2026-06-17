@@ -70,3 +70,15 @@ After the required human decisions are made, add a separate validation or modeli
 - Decision: Active-at-cutoff cohort retains rows only when `date_registration <= cutoff_day` or missing, and `date_unregistration > cutoff_day` or missing.
 - Decision: `date_unregistration` is used only for cohort construction and is not written to cohort or baseline outputs.
 - Decision: Rows with missing `date_registration` are retained in the baseline cohort with missing flags because the count is small and registration status cannot be confirmed.
+- Decision: Raw OULAD files may be read from either `data/kaggle_oulad/` or `open+university+learning+analytics+dataset/`; raw files are not copied or overwritten.
+- Decision: Raw CSV value `?` is parsed as missing during script reads so registration dates, unregistration dates, due dates, scores, and related fields are typed and audited correctly.
+
+## Gunwoo Demographic Feature Agent
+
+- Decision: Added a focused demographic experiment for `gender`, `region`, and `age_band`.
+- Decision: Compare two feature sets only: `demographic_only` and `base_demographic`.
+- Decision: `base_demographic` uses `active_days_until_cutoff` and `total_click_until_cutoff_mean_strategy` as the reviewed base features.
+- Decision: Demographic categorical features are one-hot encoded inside the modeling pipeline, leaving baseline CSV files unchanged.
+- Decision: `date_unregistration`, `final_result`, `target_withdrawn`, and `target_at_risk` are excluded from predictors.
+- Decision: The script saves cross-validation summaries and an input feature audit, but does not save a final model artifact.
+- Decision: Actual model results were generated for week 5, week 7, and week 10 after creating the reviewed baseline feature files locally.

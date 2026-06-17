@@ -5,7 +5,11 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data" / "kaggle_oulad"
+RAW_DIR_CANDIDATES = [
+    ROOT / "data" / "kaggle_oulad",
+    ROOT / "open+university+learning+analytics+dataset",
+]
+DATA_DIR = next((path for path in RAW_DIR_CANDIDATES if path.exists()), RAW_DIR_CANDIDATES[0])
 REPORT_DIR = ROOT / "reports"
 TABLE_DIR = ROOT / "data" / "report_tables" / "data_preprocessing"
 REPORT_PATH = REPORT_DIR / "data_integrity_report.md"
@@ -42,8 +46,8 @@ RANGE_COLUMNS = {
 
 
 def ensure_dirs() -> None:
-    REPORT_DIR.mkdir(exist_ok=True)
-    TABLE_DIR.mkdir(exist_ok=True)
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    TABLE_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def load_tables() -> dict[str, pd.DataFrame]:
@@ -53,7 +57,7 @@ def load_tables() -> dict[str, pd.DataFrame]:
         path = DATA_DIR / filename
         if not path.exists():
             raise FileNotFoundError(f"Missing expected table: {path}")
-        df = pd.read_csv(path)
+        df = pd.read_csv(path, na_values="?")
         tables[name] = df
         print(f"Loaded {name}: shape={df.shape}, file={path}")
     return tables
