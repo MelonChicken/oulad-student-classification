@@ -1,0 +1,5 @@
+version,week,model,precision,recall,f1_atrisk,f1_macro,roc_auc
+add_ext,N/A,RandomForest,0.6148,0.626,0.6198,0.5932,0.6255
+add_ext,N/A,DecisionTree,0.6196,0.5967,0.6069,0.592,0.6261
+add_ext,N/A,NaiveBayes,0.6768,0.3016,0.4172,0.5287,0.6116
+add_ext,N/A,KNN,0.576,0.3357,0.4235,0.5056,0.5359
