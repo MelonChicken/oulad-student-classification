@@ -1,0 +1,6 @@
+feature,mean_success,mean_atrisk,mean_diff,cohens_d,corr_w_target
+active_days,0.292,-0.419,-0.711,-0.759,-0.35
+total_clicks,0.204,-0.293,-0.496,-0.512,-0.244
+highest_education,1.854,1.641,-0.212,-0.285,-0.139
+prev_attempts,0.105,0.218,0.113,0.267,0.13
+studied_credits,-0.05,0.072,0.121,0.122,0.06
