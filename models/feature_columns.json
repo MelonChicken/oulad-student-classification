@@ -1,0 +1,32 @@
+{
+  "target": "target_at_risk",
+  "features": [
+    "active_days_until_cutoff",
+    "total_click_until_cutoff",
+    "used_site_count_until_cutoff",
+    "avg_click_per_active_day_until_cutoff",
+    "days_since_last_activity_at_cutoff",
+    "assessment_count_until_cutoff",
+    "mean_score_until_cutoff",
+    "avg_days_before_due_until_cutoff",
+    "highest_education_encoded",
+    "credits_bin"
+  ],
+  "numeric_features": [
+    "active_days_until_cutoff",
+    "total_click_until_cutoff",
+    "used_site_count_until_cutoff",
+    "avg_click_per_active_day_until_cutoff",
+    "days_since_last_activity_at_cutoff",
+    "assessment_count_until_cutoff",
+    "mean_score_until_cutoff",
+    "avg_days_before_due_until_cutoff",
+    "highest_education_encoded"
+  ],
+  "categorical_features": [
+    "credits_bin"
+  ],
+  "group_column": "id_student",
+  "test_size": 0.2,
+  "random_state": 724
+}
