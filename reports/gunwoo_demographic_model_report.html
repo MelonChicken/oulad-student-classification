@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demographic Feature Model Report</title>
+<style>
+body{margin:0;background:#f7f8fb;color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.58}
+main{max-width:1180px;margin:0 auto;padding:44px 22px 80px}
+h1{font-size:42px;line-height:1.08;margin:0 0 12px;letter-spacing:-.02em}
+h2{font-size:24px;margin:44px 0 12px}
+h3{font-size:18px;margin:0 0 16px}
+p{color:#4b5565;margin:8px 0}
+.hero{border-bottom:1px solid #d9dfeb;padding-bottom:30px}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.pill{border:1px solid #cdd5e2;border-radius:999px;padding:6px 11px;font-size:12px;background:white;color:#394559}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}
+.card{background:white;border:1px solid #d9dfeb;border-radius:10px;padding:18px}
+.charts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:18px 0 24px}
+.chartcard{background:white;border:1px solid #d9dfeb;border-radius:10px;padding:18px}
+.chartrow{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;margin:14px 0}
+.chartlabel{font-weight:800;color:#263244}
+.chartbars{display:grid;gap:8px}
+.barline{display:grid;grid-template-columns:92px 1fr 58px;gap:9px;align-items:center}
+.series{font-size:12px;color:#526174}
+.series.demo{color:#64748b}
+.series.base{color:#0f766e;font-weight:700}
+.hbar{height:14px;background:#e5e9f1;border-radius:999px;overflow:hidden}
+.hbar i{display:block;height:100%;border-radius:999px}
+.hbar i.demo{background:#94a3b8}
+.hbar i.base{background:linear-gradient(90deg,#14b8a6,#2563eb)}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#5b6b82}
+.big{font-size:31px;font-weight:800;margin:8px 0 4px;color:#0f766e}
+.note{background:#ecfdf5;border-left:4px solid #0f766e;padding:14px 16px;border-radius:8px;margin:18px 0}
+.warn{background:#fff7ed;border-left-color:#c2410c}
+.tablewrap{overflow-x:auto;border:1px solid #d9dfeb;border-radius:10px;background:white}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:10px 12px;border-bottom:1px solid #e6ebf3;text-align:left;white-space:nowrap}
+th{background:#eef2f7;color:#334155;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+tr:last-child td{border-bottom:none}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.strong{font-weight:800;color:#0f766e}
+.gain{font-weight:800;color:#1d4ed8}
+.bar{height:9px;background:#e5e9f1;border-radius:999px;min-width:120px;overflow:hidden}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#14b8a6,#2563eb);border-radius:999px}
+code{background:#eef2f7;border:1px solid #d9dfeb;border-radius:5px;padding:2px 5px}
+@media(max-width:820px){.cards,.charts{grid-template-columns:1fr}.barline{grid-template-columns:80px 1fr 52px}h1{font-size:32px}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+<h1>Demographic Feature Model Report</h1>
+<p>OULAD early at-risk prediction에서 <code>gender</code>, <code>region</code>, <code>age_band</code>만 사용한 경우와 base feature를 추가한 경우를 비교했다.</p>
+<div class="pillrow">
+<span class="pill">target: target_at_risk</span>
+<span class="pill">cutoffs: week5 / week7 / week10</span>
+<span class="pill">CV: Stratified 5-fold</span>
+<span class="pill">raw files not modified</span>
+</div>
+</section>
+
+<section>
+<h2>요약</h2>
+<div class="cards"><div class='card'><div class='label'>Week10 demographic only</div><div class='big'>F1 0.5025</div><p>best model: random_forest, ROC-AUC 0.5550</p></div>
+<div class='card'><div class='label'>Week10 base + demographic</div><div class='big'>F1 0.6215</div><p>best model: logistic_regression, ROC-AUC 0.7193</p></div>
+<div class='card'><div class='label'>Base feature lift</div><div class='big'>+0.1643</div><p>week10 ROC-AUC gain from adding active days and total clicks</p></div></div>
+<div class="note">
+<b>결론:</b> demographic-only는 ROC-AUC가 약 0.55 수준이라 약한 신호만 보인다.
+하지만 <code>active_days_until_cutoff</code>, <code>total_click_until_cutoff_mean_strategy</code>를 추가하면 모든 cutoff에서 성능이 크게 올라간다.
+즉, 학생 개인 정보는 baseline/context signal이고, 실제 예측력은 초기 LMS 활동량에서 더 크게 나온다.
+</div>
+</section>
+
+<section>
+<h2>성능 그래프</h2>
+<p>각 cutoff에서 담당 피처만 사용한 경우와 base feature를 추가한 경우의 성능 차이를 시각화했다.</p>
+<div class="charts"><div class='chartcard'><h3>F1 비교</h3><div class='chartrow'><div class='chartlabel'>week5</div><div class='chartbars'><div class='barline'><span class='series demo'>demo only</span><div class='hbar'><i class='demo' style='width:84.7%'></i></div><b>0.5261</b></div><div class='barline'><span class='series base'>base + demo</span><div class='hbar'><i class='base' style='width:98.7%'></i></div><b>0.6135</b></div></div></div><div class='chartrow'><div class='chartlabel'>week7</div><div class='chartbars'><div class='barline'><span class='series demo'>demo only</span><div class='hbar'><i class='demo' style='width:83.2%'></i></div><b>0.5170</b></div><div class='barline'><span class='series base'>base + demo</span><div class='hbar'><i class='base' style='width:99.1%'></i></div><b>0.6159</b></div></div></div><div class='chartrow'><div class='chartlabel'>week10</div><div class='chartbars'><div class='barline'><span class='series demo'>demo only</span><div class='hbar'><i class='demo' style='width:80.9%'></i></div><b>0.5025</b></div><div class='barline'><span class='series base'>base + demo</span><div class='hbar'><i class='base' style='width:100.0%'></i></div><b>0.6215</b></div></div></div></div><div class='chartcard'><h3>ROC-AUC 비교</h3><div class='chartrow'><div class='chartlabel'>week5</div><div class='chartbars'><div class='barline'><span class='series demo'>demo only</span><div class='hbar'><i class='demo' style='width:77.2%'></i></div><b>0.5552</b></div><div class='barline'><span class='series base'>base + demo</span><div class='hbar'><i class='base' style='width:95.4%'></i></div><b>0.6860</b></div></div></div><div class='chartrow'><div class='chartlabel'>week7</div><div class='chartbars'><div class='barline'><span class='series demo'>demo only</span><div class='hbar'><i class='demo' style='width:77.1%'></i></div><b>0.5544</b></div><div class='barline'><span class='series base'>base + demo</span><div class='hbar'><i class='base' style='width:97.5%'></i></div><b>0.7017</b></div></div></div><div class='chartrow'><div class='chartlabel'>week10</div><div class='chartbars'><div class='barline'><span class='series demo'>demo only</span><div class='hbar'><i class='demo' style='width:77.2%'></i></div><b>0.5550</b></div><div class='barline'><span class='series base'>base + demo</span><div class='hbar'><i class='base' style='width:100.0%'></i></div><b>0.7193</b></div></div></div></div></div>
+</section>
+
+<section>
+<h2>Base Feature 추가 효과</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>cutoff</th><th>demo only model</th><th class="num">demo F1</th><th class="num">demo ROC-AUC</th><th>base+demo model</th><th class="num">base F1</th><th class="num">base ROC-AUC</th><th class="num">F1 gain</th><th class="num">ROC-AUC gain</th></tr></thead>
+<tbody><tr><td>week5</td><td>random_forest</td><td class='num'>0.5261</td><td class='num'>0.5552</td><td>logistic_regression</td><td class='num strong'>0.6135</td><td class='num strong'>0.6860</td><td class='num gain'>+0.0874</td><td class='num gain'>+0.1308</td></tr><tr><td>week7</td><td>random_forest</td><td class='num'>0.5170</td><td class='num'>0.5544</td><td>logistic_regression</td><td class='num strong'>0.6159</td><td class='num strong'>0.7017</td><td class='num gain'>+0.0990</td><td class='num gain'>+0.1473</td></tr><tr><td>week10</td><td>random_forest</td><td class='num'>0.5025</td><td class='num'>0.5550</td><td>logistic_regression</td><td class='num strong'>0.6215</td><td class='num strong'>0.7193</td><td class='num gain'>+0.1190</td><td class='num gain'>+0.1643</td></tr></tbody>
+</table></div>
+</section>
+
+<section>
+<h2>전체 모델별 성능</h2>
+<p>팀원에게 전체 성능을 전달할 때는 이 표의 원본 CSV인 <code>reports/tables/gunwoo_demographic_model_summary.csv</code>를 주면 된다.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>cutoff</th><th>feature set</th><th>model</th><th class="num">precision</th><th class="num">recall</th><th class="num">F1</th><th>F1 bar</th><th class="num">ROC-AUC</th><th class="num">accuracy</th></tr></thead>
+<tbody><tr><td>week5</td><td>base_demographic</td><td>decision_tree</td><td class='num'>0.6220</td><td class='num'>0.4605</td><td class='num strong'>0.5292</td><td><div class='bar'><span style='width:85.2%'></span></div></td><td class='num'>0.6802</td><td class='num'>0.6434</td></tr><tr><td>week5</td><td>base_demographic</td><td>logistic_regression</td><td class='num'>0.5547</td><td class='num'>0.6863</td><td class='num strong'>0.6135</td><td><div class='bar'><span style='width:98.7%'></span></div></td><td class='num'>0.6860</td><td class='num'>0.6237</td></tr><tr><td>week5</td><td>base_demographic</td><td>random_forest</td><td class='num'>0.5831</td><td class='num'>0.5985</td><td class='num strong'>0.5907</td><td><div class='bar'><span style='width:95.1%'></span></div></td><td class='num'>0.6889</td><td class='num'>0.6391</td></tr><tr><td>week5</td><td>demographic_only</td><td>decision_tree</td><td class='num'>0.5148</td><td class='num'>0.1206</td><td class='num strong'>0.1954</td><td><div class='bar'><span style='width:31.4%'></span></div></td><td class='num'>0.5458</td><td class='num'>0.5679</td></tr><tr><td>week5</td><td>demographic_only</td><td>logistic_regression</td><td class='num'>0.4728</td><td class='num'>0.5543</td><td class='num strong'>0.5103</td><td><div class='bar'><span style='width:82.1%'></span></div></td><td class='num'>0.5577</td><td class='num'>0.5371</td></tr><tr><td>week5</td><td>demographic_only</td><td>random_forest</td><td class='num'>0.4677</td><td class='num'>0.6011</td><td class='num strong'>0.5261</td><td><div class='bar'><span style='width:84.7%'></span></div></td><td class='num'>0.5552</td><td class='num'>0.5287</td></tr><tr><td>week7</td><td>base_demographic</td><td>decision_tree</td><td class='num'>0.6426</td><td class='num'>0.4414</td><td class='num strong'>0.5233</td><td><div class='bar'><span style='width:84.2%'></span></div></td><td class='num'>0.6975</td><td class='num'>0.6580</td></tr><tr><td>week7</td><td>base_demographic</td><td>logistic_regression</td><td class='num'>0.5546</td><td class='num'>0.6926</td><td class='num strong'>0.6159</td><td><div class='bar'><span style='width:99.1%'></span></div></td><td class='num'>0.7017</td><td class='num'>0.6326</td></tr><tr><td>week7</td><td>base_demographic</td><td>random_forest</td><td class='num'>0.5851</td><td class='num'>0.6125</td><td class='num strong'>0.5985</td><td><div class='bar'><span style='width:96.3%'></span></div></td><td class='num'>0.7026</td><td class='num'>0.6505</td></tr><tr><td>week7</td><td>demographic_only</td><td>decision_tree</td><td class='num'>0.5067</td><td class='num'>0.0870</td><td class='num strong'>0.1484</td><td><div class='bar'><span style='width:23.9%'></span></div></td><td class='num'>0.5432</td><td class='num'>0.5756</td></tr><tr><td>week7</td><td>demographic_only</td><td>logistic_regression</td><td class='num'>0.4628</td><td class='num'>0.5528</td><td class='num strong'>0.5038</td><td><div class='bar'><span style='width:81.1%'></span></div></td><td class='num'>0.5572</td><td class='num'>0.5369</td></tr><tr><td>week7</td><td>demographic_only</td><td>random_forest</td><td class='num'>0.4574</td><td class='num'>0.5944</td><td class='num strong'>0.5170</td><td><div class='bar'><span style='width:83.2%'></span></div></td><td class='num'>0.5544</td><td class='num'>0.5276</td></tr><tr><td>week10</td><td>base_demographic</td><td>decision_tree</td><td class='num'>0.6711</td><td class='num'>0.4348</td><td class='num strong'>0.5277</td><td><div class='bar'><span style='width:84.9%'></span></div></td><td class='num'>0.7165</td><td class='num'>0.6811</td></tr><tr><td>week10</td><td>base_demographic</td><td>logistic_regression</td><td class='num'>0.5549</td><td class='num'>0.7062</td><td class='num strong'>0.6215</td><td><div class='bar'><span style='width:100.0%'></span></div></td><td class='num'>0.7193</td><td class='num'>0.6475</td></tr><tr><td>week10</td><td>base_demographic</td><td>random_forest</td><td class='num'>0.5919</td><td class='num'>0.6098</td><td class='num strong'>0.6007</td><td><div class='bar'><span style='width:96.7%'></span></div></td><td class='num'>0.7206</td><td class='num'>0.6678</td></tr><tr><td>week10</td><td>demographic_only</td><td>decision_tree</td><td class='num'>0.5023</td><td class='num'>0.0415</td><td class='num strong'>0.0766</td><td><div class='bar'><span style='width:12.3%'></span></div></td><td class='num'>0.5456</td><td class='num'>0.5904</td></tr><tr><td>week10</td><td>demographic_only</td><td>logistic_regression</td><td class='num'>0.4472</td><td class='num'>0.5536</td><td class='num strong'>0.4947</td><td><div class='bar'><span style='width:79.6%'></span></div></td><td class='num'>0.5583</td><td class='num'>0.5366</td></tr><tr><td>week10</td><td>demographic_only</td><td>random_forest</td><td class='num'>0.4400</td><td class='num'>0.5856</td><td class='num strong'>0.5025</td><td><div class='bar'><span style='width:80.9%'></span></div></td><td class='num'>0.5550</td><td class='num'>0.5247</td></tr></tbody>
+</table></div>
+</section>
+
+<section>
+<h2>전처리/입력 검증</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>cutoff</th><th>feature set</th><th class="num">rows</th><th class="num">positive rate</th><th>categorical</th><th>numeric</th><th class="num">duplicated key rows</th><th>selected leakage cols</th></tr></thead>
+<tbody><tr><td>week5</td><td>base_demographic</td><td class='num'>27229</td><td class='num'>0.4352</td><td>gender;region;age_band</td><td>active_days_until_cutoff;total_click_until_cutoff_mean_strategy</td><td class='num'>0</td><td>-</td></tr><tr><td>week5</td><td>demographic_only</td><td class='num'>27229</td><td class='num'>0.4352</td><td>gender;region;age_band</td><td>-</td><td class='num'>0</td><td>-</td></tr><tr><td>week7</td><td>base_demographic</td><td class='num'>26767</td><td class='num'>0.4253</td><td>gender;region;age_band</td><td>active_days_until_cutoff;total_click_until_cutoff_mean_strategy</td><td class='num'>0</td><td>-</td></tr><tr><td>week7</td><td>demographic_only</td><td class='num'>26767</td><td class='num'>0.4253</td><td>gender;region;age_band</td><td>-</td><td class='num'>0</td><td>-</td></tr><tr><td>week10</td><td>base_demographic</td><td class='num'>26062</td><td class='num'>0.4098</td><td>gender;region;age_band</td><td>active_days_until_cutoff;total_click_until_cutoff_mean_strategy</td><td class='num'>0</td><td>-</td></tr><tr><td>week10</td><td>demographic_only</td><td class='num'>26062</td><td class='num'>0.4098</td><td>gender;region;age_band</td><td>-</td><td class='num'>0</td><td>-</td></tr></tbody>
+</table></div>
+<div class="note warn">
+<b>주의:</b> demographic feature는 사회적/제도적 맥락을 반영할 수 있으므로 단독 의사결정 기준으로 쓰면 안 된다.
+보고서에서는 행동 피처를 붙였을 때 성능이 크게 좋아진다는 비교 기준으로 해석하는 것이 적절하다.
+</div>
+</section>
+
+<section>
+<h2>공유 파일</h2>
+<p><code>reports/tables/gunwoo_demographic_model_summary.csv</code>: 모든 모델별 성능 원본표</p>
+<p><code>reports/tables/gunwoo_demographic_feature_audit.csv</code>: feature set별 입력 검증표</p>
+<p><code>reports/gunwoo_demographic_feature_report.md</code>: Markdown 분석 보고서</p>
+</section>
+</main>
+</body>
+</html>

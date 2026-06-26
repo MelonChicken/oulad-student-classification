@@ -7,9 +7,9 @@ This report documents the leakage-safe feature pipeline outputs. No final models
 ## Output Files
 | cutoff | cutoff_day | path | rows | columns | duplicated_base_key_rows | target_distribution | missing_columns_nonzero | forbidden_columns_present | after_cutoff_feature_violations |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| week5 | 35 | data\processed\features_week5.csv | 32593 | 68 | 0 | 0: 22437, 1: 10156 | 12 |  |  |
-| week7 | 49 | data\processed\features_week7.csv | 32593 | 68 | 0 | 0: 22437, 1: 10156 | 12 |  |  |
-| week10 | 70 | data\processed\features_week10.csv | 32593 | 70 | 0 | 0: 22437, 1: 10156 | 12 |  |  |
+| week5 | 35 | data/processed/features_week5.csv | 32593 | 68 | 0 | 0: 22437, 1: 10156 | 12 |  |  |
+| week7 | 49 | data/processed/features_week7.csv | 32593 | 68 | 0 | 0: 22437, 1: 10156 | 12 |  |  |
+| week10 | 70 | data/processed/features_week10.csv | 32593 | 70 | 0 | 0: 22437, 1: 10156 | 12 |  |  |
 
 ## Feature Rules Applied
 

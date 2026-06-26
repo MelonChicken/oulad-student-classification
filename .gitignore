@@ -1,2 +1,5 @@
 /.venv/
 /data/
+.DS_Store
+.pycache_tmp/
+open+university+learning+analytics+dataset/
