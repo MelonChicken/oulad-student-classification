@@ -1,145 +1,132 @@
-# Minimal Codex Agent Run Guide
+# OULAD Pipeline Run Guide
 
-This version keeps only the essential and effective agents.
-
-## Why only four agents?
-
-The project does not need many agents. The useful split is:
-
-1. Data Integrity Agent
-2. Leakage Guard Agent
-3. Feature Pipeline Agent
-4. Reviewer Agent
-
-The main Codex session acts as the orchestrator. A separate Orchestrator Agent is unnecessary.
-
----
-
-## Recommended first command
-
-Run from the project root:
+Run every command from the project root:
 
 ```powershell
 cd C:\Users\osca0\Dev\studyDataMining\teamproject
 ```
 
-Then:
+## 1. Prepare raw data
 
-```powershell
-codex --ask-for-approval on-request "Read AGENTS.md. Do not edit files. Summarize the project goal, known risks, and required workflow."
+Place the raw OULAD CSV files in `data/raw/`:
+
+```text
+data/raw/
+  assessments.csv
+  courses.csv
+  studentAssessment.csv
+  studentInfo.csv
+  studentRegistration.csv
+  studentVle.csv
+  vle.csv
 ```
 
----
+The current pipeline uses:
 
-## Stage 1 — Data integrity
+```text
+assessments.csv
+studentAssessment.csv
+studentInfo.csv
+studentRegistration.csv
+studentVle.csv
+```
+
+## 2. Install dependencies
 
 ```powershell
-codex --ask-for-approval on-request "Read AGENTS.md and prompts/01_data_integrity_agent.md. Complete only this agent task. Do not build features or train models."
+pip install -r requirements.txt
+```
+
+## 3. Build cutoff feature files
+
+```powershell
+python -m src.build_features
 ```
 
 Expected outputs:
 
 ```text
-src/audit_data_integrity.py
-reports/data_integrity_report.md
-reports/tables/
+data/processed/features_week5.csv
+data/processed/features_week7.csv
+data/processed/features_week10.csv
 ```
 
----
-
-## Stage 2 — Leakage review
-
-```powershell
-codex --ask-for-approval on-request "Read AGENTS.md, reports/data_integrity_report.md, and prompts/02_leakage_guard_agent.md. Complete only this agent task. Do not build features or train models."
-```
-
-Expected output:
+The script prints validation evidence for each cutoff:
 
 ```text
-reports/leakage_review.md
+rows
+positive_rate
+studentVle duplicate key rows handled by mean aggregation
+future VLE rows excluded
+future assessment rows excluded
+unmatched assessment rows
 ```
 
----
-
-## Stage 3 — Feature pipeline
-
-Only run this after Stage 1 and Stage 2 are complete.
+## 4. Train Random Forest models
 
 ```powershell
-codex --ask-for-approval on-request "Read AGENTS.md, reports/data_integrity_report.md, reports/leakage_review.md, and prompts/03_feature_pipeline_agent.md. Complete only this agent task. Do not train final models."
+python -m src.train_model
 ```
 
 Expected outputs:
 
 ```text
-src/build_features.py
-reports/feature_pipeline_report.md
-data/processed/
+models/rf_week5.pkl
+models/rf_week7.pkl
+models/rf_week10.pkl
+models/metrics.json
+models/feature_columns.json
+data/processed/test_students.csv
 ```
 
----
+The training script uses `GroupShuffleSplit` with `id_student` groups, `test_size=0.2`, and `random_state=724`.
 
-## Stage 4 — Reviewer
-
-## Stage 4b Active-at-cutoff cohort and baseline
-
-Run this after the cutoff feature files are created:
+## 5. Create anonymized app data
 
 ```powershell
-python src\build_cohort.py
+python -m src.anonymize
 ```
 
 Expected outputs:
 
 ```text
-src/build_cohort.py
-reports/cohort_report.md
-data/processed/features_week{5,7,10}_cohort.csv
+data/app/app_test_students.csv
+data/app/app_features_week5.csv
+data/app/app_features_week7.csv
+data/app/app_features_week10.csv
 ```
 
-Then create the baseline/model-ready files:
+These files use `anon_id` and do not expose `id_student`. The Streamlit app reads these app-facing files only.
+
+## 6. Audit outputs
 
 ```powershell
-python src\build_baseline_features.py
+python -m src.audit_outputs
 ```
 
-Expected outputs:
+The audit checks required artifacts, selected feature columns, leakage exclusions, app anonymization, duplicate keys, target integrity, and prediction probability sanity.
 
-```text
-reports/baseline_feature_report.md
-data/processed/features_week{5,7,10}_baseline.csv
-```
-
----
+## 7. Run Streamlit
 
 ```powershell
-codex --ask-for-approval on-request "Read AGENTS.md, reports/data_integrity_report.md, reports/leakage_review.md, reports/feature_pipeline_report.md, and prompts/04_reviewer_agent.md. Review the work and write final recommendations. Do not train models."
+streamlit run app.py
 ```
 
-Expected outputs:
+Open:
 
 ```text
-reports/reviewer_summary.md
-reports/decision_log.md
+http://localhost:8501
 ```
 
----
+## One-shot run
 
-## Optional parallel version
+After raw CSV files are in `data/raw/`, run:
 
-If Codex subagents are available and you want parallel inspection:
-
-```text
-Read AGENTS.md.
-
-Use two read-only subagents in parallel:
-1. Data Integrity Agent using prompts/01_data_integrity_agent.md
-2. Leakage Guard Agent using prompts/02_leakage_guard_agent.md
-
-Wait for both results.
-Do not run feature engineering.
-Summarize conflicts and unresolved decisions.
+```powershell
+pip install -r requirements.txt
+python -m src.build_features
+python -m src.train_model
+python -m src.anonymize
+python -m src.audit_outputs
+streamlit run app.py
 ```
-
-Do not run Feature Pipeline Agent in parallel with the first two agents.
-Feature creation must wait until integrity and leakage rules are known.

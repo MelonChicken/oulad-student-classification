@@ -1,2 +1,10 @@
-/.venv/
-/data/
+.venv/
+__pycache__/
+*.pyc
+
+data/raw/
+data/processed/test_student_mapping_private.csv
+
+.streamlit/secrets.toml
+streamlit_stdout.log
+streamlit_stderr.log
